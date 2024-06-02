@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>スプラトゥーンブキルーレット</title>
+    <script src="https://unpkg.com/react/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Bhaina+2:400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <script src="https://unpkg.com/@mui/material/umd/material-ui.development.js"></script>
+    <style>
+        body {
+            font-family: 'Baloo Bhaina 2', cursive;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #root {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .title-image {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { Container, Typography, TextField, FormControlLabel, Checkbox, Button, Box } = MaterialUI;
+
+        const weapons = {
+            shooter: ["スプラシューター", "プライムシューター", "ボールドマーカー", "わかばシューター", "シャープマーカー", ".52ガロン", ".96ガロン", "L3リールガン", "H3リールガン", "N-ZAP85", "N-ZAP89", "スプラマニューバー", "ケルビン525", "クアッドホッパーブラック", "クアッドホッパーホワイト"],
+            roller: ["スプラローラー", "ダイナモローラー", "カーボンローラー", "ヴァリアブルローラー", "ワイドローラー"],
+            charger: ["スプラチャージャー", "スプラスコープ", "リッター4K", "4Kスコープ", "14式竹筒銃・甲", "ソイチューバー", "スクイックリンα"],
+            slosher: ["バケットスロッシャー", "バケットスロッシャーデコ", "オーバーフロッシャー", "スクリュースロッシャー", "ヒッセン", "ヒッセン・ヒュー", "エクスプロッシャー"],
+            spinner: ["バレルスピナー", "スプラスピナー", "ハイドラント", "クーゲルシュライバー", "ノーチラス47", "ノーチラス79"],
+            shelter: ["パラシェルター", "キャンピングシェルター", "スパイガジェット"]
+        };
+
+        const getRandomWeapon = (restrictions) => {
+            let allWeapons = [];
+            for (let type in weapons) {
+                if (!restrictions.includes(type)) {
+                    allWeapons = allWeapons.concat(weapons[type]);
+                }
+            }
+            const randomIndex = Math.floor(Math.random() * allWeapons.length);
+            return allWeapons[randomIndex];
+        };
+
+        const App = () => {
+            const [players, setPlayers] = React.useState([
+                { name: "プレイヤー1", restrictions: [] },
+                { name: "プレイヤー2", restrictions: [] },
+                { name: "プレイヤー3", restrictions: [] },
+                { name: "プレイヤー4", restrictions: [] }
+            ]);
+            const [freeChoiceEnabled, setFreeChoiceEnabled] = React.useState(false);
+            const [results, setResults] = React.useState([]);
+
+            const handleNameChange = (index, value) => {
+                const newPlayers = [...players];
+                newPlayers[index].name = value;
+                setPlayers(newPlayers);
+            };
+
+            const handleRestrictionChange = (index, restriction) => {
+                const newPlayers = [...players];
+                if (newPlayers[index].restrictions.includes(restriction)) {
+                    newPlayers[index].restrictions = newPlayers[index].restrictions.filter(r => r !== restriction);
+                } else {
+                    newPlayers[index].restrictions.push(restriction);
+                }
+                setPlayers(newPlayers);
+            };
+
+            const spinRoulette = () => {
+                const newResults = [];
+                const freeChoicePlayer = freeChoiceEnabled ? Math.floor(Math.random() * 4) : null;
+                for (let i = 0; i < 4; i++) {
+                    let weapon;
+                    if (freeChoiceEnabled && i === freeChoicePlayer) {
+                        weapon = "自由選択";
+                    } else {
+                        weapon = getRandomWeapon(players[i].restrictions);
+                    }
+                    newResults.push({ name: players[i].name, weapon });
+                }
+                setResults(newResults);
+            };
+
+            return (
+                <Container maxWidth="sm" className="container">
+                    <img src="https://via.placeholder.com/600x200.png?text=Splatoon+Title" alt="スプラトゥーンタイトル画像" className="title-image" />
+                    <Typography variant="h3" align="center" gutterBottom>
+                        スプラトゥーンブキルーレット
+                    </Typography>
+                    {players.map((player, index) => (
+                        <Box key={index} mb={3}>
+                            <Typography variant="h5">{`プレイヤー${index + 1}`}</Typography>
+                            <TextField
+                                label="名前"
+                                variant="outlined"
+                                fullWidth
+                                margin="normal"
+                                value={player.name}
+                                onChange={(e) => handleNameChange(index, e.target.value)}
+                            />
+                            <Box display="flex" flexDirection="column" alignItems="flex-start">
+                                <Typography>ブキ種制限:</Typography>
+                                {["shooter", "roller", "charger", "slosher", "spinner", "shelter"].map(type => (
+                                    <FormControlLabel
+                                        key={type}
+                                        control={
+                                            <Checkbox
+                                                checked={player.restrictions.includes(type)}
+                                                onChange={() => handleRestrictionChange(index, type)}
+                                                color="primary"
+                                            />
+                                        }
+                                        label={type === "shooter" ? "シューター除外" : type === "roller" ? "ローラー除外" : type === "charger" ? "チャージャー除外" : type === "slosher" ? "スロッシャー除外" : type === "spinner" ? "スピナー除外" : "シェルター除外"}
+                                    />
+                                ))}
+                            </Box>
+                        </Box>
+                    ))}
+                    <Box mb={3}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={freeChoiceEnabled}
+                                    onChange={() => setFreeChoiceEnabled(!freeChoiceEnabled)}
+                                    color="primary"
+                                />
+                            }
+                            label="自由選択オプションを有効にする"
+                        />
+                    </Box>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={spinRoulette}
+                        fullWidth
+                    >
+                        ルーレットを回す
+                    </Button>
+                    <Box mt={3}>
+                        {results.map((result, index) => (
+                            <Typography key={index} variant="h6">{`${result.name}: ${result.weapon}`}</Typography>
+                        ))}
+                    </Box>
+                </Container>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
+
