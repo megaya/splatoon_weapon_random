@@ -35,6 +35,34 @@
         .container {
             text-align: center;
         }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .player-name {
+            font-weight: bold;
+        }
+        .weapon {
+            font-style: italic;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -68,14 +96,29 @@
         };
 
         const App = () => {
-            const [players, setPlayers] = React.useState([
-                { name: "プレイヤー1", restrictions: [] },
-                { name: "プレイヤー2", restrictions: [] },
-                { name: "プレイヤー3", restrictions: [] },
-                { name: "プレイヤー4", restrictions: [] }
-            ]);
-            const [freeChoiceEnabled, setFreeChoiceEnabled] = React.useState(false);
+            const [players, setPlayers] = React.useState(() => {
+                const savedPlayers = localStorage.getItem('players');
+                return savedPlayers ? JSON.parse(savedPlayers) : [
+                    { name: "プレイヤー1", restrictions: [] },
+                    { name: "プレイヤー2", restrictions: [] },
+                    { name: "プレイヤー3", restrictions: [] },
+                    { name: "プレイヤー4", restrictions: [] }
+                ];
+            });
+            const [freeChoiceEnabled, setFreeChoiceEnabled] = React.useState(() => {
+                const savedFreeChoiceEnabled = localStorage.getItem('freeChoiceEnabled');
+                return savedFreeChoiceEnabled ? JSON.parse(savedFreeChoiceEnabled) : false;
+            });
             const [results, setResults] = React.useState([]);
+            const [currentPlayer, setCurrentPlayer] = React.useState(0);
+
+            React.useEffect(() => {
+                localStorage.setItem('players', JSON.stringify(players));
+            }, [players]);
+
+            React.useEffect(() => {
+                localStorage.setItem('freeChoiceEnabled', JSON.stringify(freeChoiceEnabled));
+            }, [freeChoiceEnabled]);
 
             const handleNameChange = (index, value) => {
                 const newPlayers = [...players];
@@ -94,18 +137,29 @@
             };
 
             const spinRoulette = () => {
-                const newResults = [];
-                const freeChoicePlayer = freeChoiceEnabled ? Math.floor(Math.random() * 4) : null;
-                for (let i = 0; i < 4; i++) {
-                    let weapon;
-                    if (freeChoiceEnabled && i === freeChoicePlayer) {
-                        weapon = "自由選択";
-                    } else {
-                        weapon = getRandomWeapon(players[i].restrictions);
-                    }
-                    newResults.push({ name: players[i].name, weapon });
+                setResults([]);
+                setCurrentPlayer(0);
+                showResultForPlayer(0);
+            };
+
+            const showResultForPlayer = (index) => {
+                if (index >= players.length) return;
+
+                const player = players[index];
+                const restrictions = player.restrictions;
+                const freeChoicePlayer = freeChoiceEnabled ? Math.floor(Math.random() * players.length) : null;
+
+                let weapon;
+                if (freeChoiceEnabled && index === freeChoicePlayer) {
+                    weapon = "自由選択";
+                } else {
+                    weapon = getRandomWeapon(restrictions);
                 }
-                setResults(newResults);
+
+                const newResult = { name: player.name, weapon };
+                setResults(prevResults => [...prevResults, newResult]);
+
+                setTimeout(() => showResultForPlayer(index + 1), 1000);
             };
 
             return (
@@ -165,7 +219,10 @@
                     </Button>
                     <Box mt={3}>
                         {results.map((result, index) => (
-                            <Typography key={index} variant="h6">{`${result.name}: ${result.weapon}`}</Typography>
+                            <Box key={index} className="result-item">
+                                <Typography className="player-name">{result.name}</Typography>
+                                <Typography className="weapon">{result.weapon}</Typography>
+                            </Box>
                         ))}
                     </Box>
                 </Container>
@@ -176,4 +233,3 @@
     </script>
 </body>
 </html>
-
