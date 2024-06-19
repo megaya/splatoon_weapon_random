@@ -12,7 +12,8 @@
     <style>
         body {
             font-family: 'Baloo Bhaina 2', cursive;
-            background-color: #f0f4f8;
+            background: url('./back.png') no-repeat center center fixed;
+            background-size: cover;
             margin: 0;
             padding: 0;
             display: flex;
@@ -44,17 +45,6 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             background-color: #f9f9f9;
-            animation: fadeIn 1s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
         .player-name {
             font-weight: bold;
@@ -71,17 +61,17 @@
         const { Container, Typography, TextField, FormControlLabel, Checkbox, Button, Box } = MaterialUI;
 
         const weapons = {
-            shooter: ["わかばシューター", "スプラシューター", "プロモデラーMG", "N-ZAP85", "もみじシューター", "スペースシューター", "ボールドマーカー", "プライムシューター", "スプラシューターコラボ", ".52ガロン", "N-ZAP89", "スペースシューターコラボ", "L3リールガン", "ボールドマーカーネオ", ".52ガロンデコ", "ジェットスイーパー", "シャープマーカー", ".96ガロン", "プロモデラーRG", "L3リールガンD", "ボトルガイザー", "プライムシューターコラボ", "ジェットスイーパーカスタム", "シャープマーカーネオ", ".96ガロンデコ", "H3リールガン", "ボトルガイザーフォイル", "H3リールガンD"],
-            roller: ["スプラローラー", "カーボンローラー", "スプラローラーコラボ", "ダイナモローラー", "ワイドローラー", "ダイナモローラーテスラ", "ワイドローラーコラボ", "ヴァリアブルローラー", "カーボンローラーデコ", "ヴァリアブルローラーフォイル"],
-            charger: ["スプラチャージャー（スコープ選択可）", "スクイックリンα", "スプラチャージャーコラボ（スコープ選択可）", "スクイックリンβ", "R-PEN/5H", "リッター4K（スコープ選択可）", "R-PEN/5B", "リッター4Kカスタム（スコープ選択可）", "14式竹筒銃・甲", "ソイチューバー", "14式竹筒銃・乙", "ソイチューバーカスタム"],
-            slosher: ["バケットスロッシャー", "ヒッセン", "バケットスロッシャーデコ", "スクリュースロッシャー", "モップリン", "ヒッセン・ヒュー", "モップリンD", "オーバーフロッシャー", "スクリュースロッシャーネオ", "オーバーフロッシャーデコ", "エクスプロッシャー", "エクスプロッシャーカスタム"],
-            spinner: ["バレルスピナー", "スプラスピナー", "イグザミナー", "バレルスピナーデコ", "イグザミナー・ヒュー", "ハイドラント", "ハイドラントカスタム", "スプラスピナーコラボ", "ノーチラス47", "ノーチラス79", "クーゲルシュライバー", "クーゲルシュライバー・ヒュー"],
-            maneuver: ["スプラマニューバー", "デュアルスイーパー", "スプラマニューバーコラボ", "スパッタリー", "デュアルスイーパーカスタム", "クアッドホッパーブラック", "ケルビン525", "ガエンFF", "クアッドホッパーホワイト", "スパッタリー・ヒュー", "ケルビン525デコ", "ガエンFFカスタム"],
-            shelter: ["パラシェルター", "24式張替傘・甲", "キャンピングシェルター", "スパイガジェット", "パラシェルターソレーラ", "24式張替傘・乙", "キャンピングシェルターソレーラ", "スパイガジェットソレーラ"],
-            blaster: ["ホットブラスター", "ラピッドブラスター", "ホットブラスターカスタム", "ラピッドブラスターデコ", "ロングブラスター", "ノヴァブラスター", "ロングブラスターカスタム", "S-BLAST92", "クラッシュブラスター", "ノヴァブラスターネオ", "クラッシュブラスターネオ", "Rブラスターエリート", "S-BLAST91", "Rブラスターエリートデコ"],
-            brush: ["ホクサイ", "パブロ", "ホクサイ・ヒュー", "フィンセント", "パブロ・ヒュー", "フィンセント・ヒュー"],
-            stringer: ["トライストリンガー", "LACT-450", "トライストリンガーコラボ", "LACT-450デコ", "フルイドⅤ", "フルイドⅤカスタム"],
-            wiper: ["ドライブワイパー", "ドライブワイパーデコ", "ジムワイパー", "ジムワイパー・ヒュー", "デンタルワイパーミント", "デンタルワイパースミ"]
+            shooter: [],
+            roller: [],
+            charger: [],
+            slosher: [],
+            spinner: [],
+            maneuver: [],
+            shelter: [],
+            blaster: [],
+            brush: [],
+            stringer: [],
+            wiper: []
         };
 
         const getRandomWeapon = (restrictions) => {
@@ -165,8 +155,6 @@
             return (
                 <Container maxWidth="sm" className="container">
                     <img src="./top.png" alt="スプラトゥーンタイトル画像" className="title-image" />
-                    <Typography variant="h3" align="center" gutterBottom>
-                    </Typography>
                     {players.map((player, index) => (
                         <Box key={index} mb={3}>
                             <Typography variant="h5">{`プレイヤー${index + 1}`}</Typography>
