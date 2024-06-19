@@ -12,7 +12,7 @@
     <style>
         body {
             font-family: 'Baloo Bhaina 2', cursive;
-            background: url('./back.png') no-repeat center center fixed;
+            background: url('background.png') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
             padding: 0;
@@ -61,18 +61,19 @@
         const { Container, Typography, TextField, FormControlLabel, Checkbox, Button, Box } = MaterialUI;
 
         const weapons = {
-            shooter: [],
-            roller: [],
-            charger: [],
-            slosher: [],
-            spinner: [],
-            maneuver: [],
-            shelter: [],
-            blaster: [],
-            brush: [],
-            stringer: [],
-            wiper: []
+            shooter: ["わかばシューター", "スプラシューター", "プロモデラーMG", "N-ZAP85", "もみじシューター", "スペースシューター", "ボールドマーカー", "プライムシューター", "スプラシューターコラボ", "52ガロン", "N-ZAP89", "スペースシューターコラボ", "L3リールガン", "ボールドマーカーネオ", "52ガロンデコ", "ジェットスイーパー", "シャープマーカー", "96ガロン", "プロモデラーRG", "L3リールガンD", "ボトルガイザー", "プライムシューターコラボ", "ジェットスイーパーカスタム", "シャープマーカーネオ", "96ガロンデコ", "H3リールガン", "ボトルガイザーフォイル", "H3リールガンD"],
+            roller: ["スプラローラー", "カーボンローラー", "スプラローラーコラボ", "ダイナモローラー", "ワイドローラー", "ダイナモローラーテスラ", "ワイドローラーコラボ", "ヴァリアブルローラー", "カーボンローラーデコ", "ヴァリアブルローラーフォイル", "オーダーローラーレプリカ"],
+            charger: ["スプラチャージャー（スコープ選択可）", "スクイックリンα", "スプラチャージャーコラボ（スコープ選択可）", "スクイックリンβ", "R-PEN/5H", "リッター4K（スコープ選択可）", "R-PEN/5B", "リッター4Kカスタム（スコープ選択可）", "14式竹筒銃・甲", "ソイチューバー", "14式竹筒銃・乙", "ソイチューバーカスタム"],
+            slosher: ["バケットスロッシャー", "ヒッセン", "バケットスロッシャーデコ", "スクリュースロッシャー", "モップリン", "ヒッセンヒュー", "モップリンD", "オーバーフロッシャー", "スクリュースロッシャーネオ", "オーバーフロッシャーデコ", "エクスプロッシャー", "エクスプロッシャーカスタム"],
+            spinner: ["バレルスピナー", "スプラスピナー", "イグザミナー", "バレルスピナーデコ", "イグザミナーヒュー", "ハイドラント", "ハイドラントカスタム", "スプラスピナーコラボ", "ノーチラス47", "ノーチラス79", "クーゲルシュライバー", "クーゲルシュライバーヒュー"],
+            maneuver: ["スプラマニューバー", "デュアルスイーパー", "スプラマニューバーコラボ", "スパッタリー", "デュアルスイーパーカスタム", "クアッドホッパーブラック", "ケルビン525", "ガエンFF", "クアッドホッパーホワイト", "スパッタリーヒュー", "ケルビン525デコ", "ガエンFFカスタム"],
+            shelter: ["パラシェルター", "24式張替傘・甲", "キャンピングシェルター", "スパイガジェット", "パラシェルターソレーラ", "24式張替傘・乙", "キャンピングシェルターソレーラ", "スパイガジェットソレーラ"],
+            blaster: ["ホットブラスター", "ラピッドブラスター", "ホットブラスターカスタム", "ラピッドブラスターデコ", "ロングブラスター", "ノヴァブラスター", "ロングブラスターカスタム", "S-BLAST92", "クラッシュブラスター", "ノヴァブラスターネオ", "クラッシュブラスターネオ", "Rブラスターエリート", "S-BLAST91", "Rブラスターエリートデコ"],
+            brush: ["ホクサイ", "パブロ", "ホクサイヒュー", "フィンセント", "パブロヒュー", "フィンセントヒュー"],
+            stringer: ["トライストリンガー", "LACT-450", "トライストリンガーコラボ", "LACT-450デコ", "フルイドⅤ", "フルイドⅤカスタム"],
+            wiper: ["ドライブワイパー", "ドライブワイパーデコ", "ジムワイパー", "ジムワイパーヒュー", "デンタルワイパーミント", "デンタルワイパースミ"]
         };
+
 
         const getRandomWeapon = (restrictions) => {
             let allWeapons = [];
@@ -95,20 +96,11 @@
                     { name: "プレイヤー4", restrictions: [] }
                 ];
             });
-            const [freeChoiceEnabled, setFreeChoiceEnabled] = React.useState(() => {
-                const savedFreeChoiceEnabled = localStorage.getItem('freeChoiceEnabled');
-                return savedFreeChoiceEnabled ? JSON.parse(savedFreeChoiceEnabled) : false;
-            });
             const [results, setResults] = React.useState([]);
-            const [currentPlayer, setCurrentPlayer] = React.useState(0);
 
             React.useEffect(() => {
                 localStorage.setItem('players', JSON.stringify(players));
             }, [players]);
-
-            React.useEffect(() => {
-                localStorage.setItem('freeChoiceEnabled', JSON.stringify(freeChoiceEnabled));
-            }, [freeChoiceEnabled]);
 
             const handleNameChange = (index, value) => {
                 const newPlayers = [...players];
@@ -118,7 +110,7 @@
 
             const handleRestrictionChange = (index, restriction) => {
                 const newPlayers = [...players];
-                if (newPlayers[index].restrictions.includes(restriction)) {
+                if (newPlayers[index].restrictions.includes(type)) {
                     newPlayers[index].restrictions = newPlayers[index].restrictions.filter(r => r !== restriction);
                 } else {
                     newPlayers[index].restrictions.push(restriction);
@@ -127,34 +119,23 @@
             };
 
             const spinRoulette = () => {
-                setResults([]);
-                setCurrentPlayer(0);
-                showResultForPlayer(0);
+                const newResults = players.map(player => {
+                    const restrictions = player.restrictions;
+                    const weapon = getRandomWeapon(restrictions);
+                    return { name: player.name, weapon };
+                });
+                setResults(newResults);
             };
 
-            const showResultForPlayer = (index) => {
-                if (index >= players.length) return;
-
-                const player = players[index];
-                const restrictions = player.restrictions;
-                const freeChoicePlayer = freeChoiceEnabled ? Math.floor(Math.random() * players.length) : null;
-
-                let weapon;
-                if (freeChoiceEnabled && index === freeChoicePlayer) {
-                    weapon = "自由選択";
-                } else {
-                    weapon = getRandomWeapon(restrictions);
-                }
-
-                const newResult = { name: player.name, weapon };
-                setResults(prevResults => [...prevResults, newResult]);
-
-                setTimeout(() => showResultForPlayer(index + 1), 1000);
+            const copyResultsToClipboard = () => {
+                const resultText = results.map(result => `${result.name}: ${result.weapon}`).join('\n');
+                navigator.clipboard.writeText(resultText)
+                    .catch(err => console.error('コピーに失敗しました: ', err));
             };
 
             return (
                 <Container maxWidth="sm" className="container">
-                    <img src="./top.png" alt="スプラトゥーンタイトル画像" className="title-image" />
+                    <img src="top.png" alt="スプラトゥーンタイトル画像" className="title-image" />
                     {players.map((player, index) => (
                         <Box key={index} mb={3}>
                             <Typography variant="h5">{`プレイヤー${index + 1}`}</Typography>
@@ -184,18 +165,6 @@
                             </Box>
                         </Box>
                     ))}
-                    <Box mb={3}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={freeChoiceEnabled}
-                                    onChange={() => setFreeChoiceEnabled(!freeChoiceEnabled)}
-                                    color="primary"
-                                />
-                            }
-                            label="自由選択オプションを有効にする"
-                        />
-                    </Box>
                     <Button
                         variant="contained"
                         color="primary"
@@ -203,6 +172,15 @@
                         fullWidth
                     >
                         ルーレットを回す
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={copyResultsToClipboard}
+                        fullWidth
+                        style={{ marginTop: '10px' }}
+                    >
+                        結果をコピーする
                     </Button>
                     <Box mt={3}>
                         {results.map((result, index) => (
