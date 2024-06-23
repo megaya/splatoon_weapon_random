@@ -110,7 +110,7 @@
 
             const handleRestrictionChange = (index, restriction) => {
                 const newPlayers = [...players];
-                if (newPlayers[index].restrictions.includes(type)) {
+                if (newPlayers[index].restrictions.includes(restriction)) {
                     newPlayers[index].restrictions = newPlayers[index].restrictions.filter(r => r !== restriction);
                 } else {
                     newPlayers[index].restrictions.push(restriction);
