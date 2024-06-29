@@ -186,7 +186,10 @@
                         {results.map((result, index) => (
                             <Box key={index} className="result-item">
                                 <Typography className="player-name">{result.name}</Typography>
-                                <Typography className="weapon">{result.weapon}</Typography>
+                                <Typography className="weapon-name">{result.weapon}</Typography>
+                                <Typography className="weapon-image">
+                                    <img src={`images/weapons/${result.weapon}\.png`} alt={result.weapon} width={100} height={100} />
+                                </Typography>
                             </Box>
                         ))}
                     </Box>
