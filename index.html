@@ -188,7 +188,7 @@
                                 <Typography className="player-name">{result.name}</Typography>
                                 <Typography className="weapon-name">{result.weapon}</Typography>
                                 <Typography className="weapon-image">
-                                    <img src={`images/weapons/${result.weapon}\.png`} alt={result.weapon} width={100} height={100} />
+                                    <img src={`images/weapons/${result.weapon.startsWith('.') ? `\\${result.weapon}` : result.weapon}\.png`} alt={result.weapon} width={100} height={100} />
                                 </Typography>
                             </Box>
                         ))}
