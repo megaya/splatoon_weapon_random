@@ -133,6 +133,13 @@
                     .catch(err => console.error('コピーに失敗しました: ', err));
             };
 
+            const formatWeaponName = (weapon) => {
+              if (weapon.includes('ガロン')) {
+                return `.${weapon}`;
+              }
+              return weapon;
+            };
+
             return (
                 <Container maxWidth="sm" className="container">
                     <img src="top.png" alt="スプラトゥーンタイトル画像" className="title-image" />
@@ -186,7 +193,7 @@
                         {results.map((result, index) => (
                             <Box key={index} className="result-item">
                                 <Typography className="player-name">{result.name}</Typography>
-                                <Typography className="weapon-name">{result.weapon}</Typography>
+                                <Typography className="weapon-name">{formatWeaponName(result.weapon)}</Typography>
                                 <Typography className="weapon-image">
                                     <img src={`images/weapons/${result.weapon}\.png`} alt={result.weapon} width={100} height={100} />
                                 </Typography>
